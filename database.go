@@ -2,18 +2,33 @@ package main
 
 import (
 	"gopkg.in/mgo.v2"
+	"fmt"
 )
 
-var dbSession *mgo.Session
-var db *mgo.Database
+var DbSession *mgo.Session
+var Db *mgo.Database
+var UserCol *mgo.Collection
 
-func connectToDb() *mgo.Session {
-	session, err := mgo.Dial(config.Database.Hostname)
+func ConnectToDb() *mgo.Session {
+	// [mongodb://][user:pass@]host1[:port1][,host2[:port2],...][/database][?options]
+	dsn := fmt.Sprintf(
+		"mongodb://%s:%s@%s:%d/%s",
+		Config.Database.User,
+		Config.Database.Password,
+		Config.Database.Hostname,
+		Config.Database.Port,
+		Config.Database.Name,
+	)
+
+	session, err := mgo.Dial(dsn)
 	if err != nil {
 		panic(err)
 	}
-	session.SetMode(mgo.Monotonic, true)
-	dbSession = session
-	db = dbSession.DB(config.Database.Name)
-	return session
+
+	DbSession = session
+	DbSession.SetMode(mgo.Monotonic, true)
+	Db = DbSession.DB(Config.Database.Name)
+	UserCol = Db.C("user")
+
+	return DbSession
 }

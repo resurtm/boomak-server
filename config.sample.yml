@@ -1,9 +1,15 @@
+# rename this file from "config.sample.yml" to "config.yml"
+
 server:
-  port: 3000
+  hostname: localhost
+  port: 3150
 
 security:
   jwtsigningkey: XXXXXX
 
 database:
-  name: XXXXXX
+  user: XXXXXX
+  password: XXXXXX
   hostname: localhost
+  port: 27017
+  name: XXXXXX

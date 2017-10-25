@@ -9,18 +9,18 @@ import (
 )
 
 func main() {
-	loadConfig()
-	connectToDb()
-	initHttp()
+	LoadConfig()
+	ConnectToDb()
+	InitHttp()
 }
 
-func initHttp() {
+func InitHttp() {
 	router := mux.NewRouter()
 
-	router.Handle("/auth", http.HandlerFunc(authHandler)).Methods("POST")
-	router.Handle("/register", http.HandlerFunc(registerHandler)).Methods("POST")
+	router.Handle("/auth", http.HandlerFunc(AuthHandler)).Methods("POST")
+	router.Handle("/register", http.HandlerFunc(RegisterHandler)).Methods("POST")
 
-	listenAddr := fmt.Sprintf(":%d", config.Server.Port)
-	fmt.Printf("Listening at \"%s\"...", listenAddr)
+	listenAddr := fmt.Sprintf("%s:%d", Config.Server.Hostname, Config.Server.Port)
+	fmt.Printf("Listening at \"%s\"...\n", listenAddr)
 	http.ListenAndServe(listenAddr, handlers.LoggingHandler(os.Stdout, router))
 }

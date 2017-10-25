@@ -2,24 +2,28 @@ package main
 
 import "github.com/jinzhu/configor"
 
-type configType struct {
+const ConfigFileName = "config.yml"
+
+type ConfigType struct {
 	Server struct {
-		Port uint `required:"true" default:"8000"`
+		Hostname string `required:"true" default:"localhost"`
+		Port     uint   `required:"true" default:"3000"`
 	}
 	Security struct {
 		JwtSigningKey string `required:"true"`
 	}
 	Database struct {
-		Name string `required:"true"`
+		User     string `required:"true"`
+		Password string `required:"true"`
 		Hostname string `required:"true" default:"localhost"`
+		Port     uint   `required:"true" default:"27017"`
+		Name     string `required:"true"`
 	}
 }
 
-const configFileName = "config.yml"
+var Config ConfigType
 
-var config configType
-
-func loadConfig() configType {
-	configor.Load(&config, configFileName)
-	return config
+func LoadConfig() ConfigType {
+	configor.Load(&Config, ConfigFileName)
+	return Config
 }

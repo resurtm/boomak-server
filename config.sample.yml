@@ -2,4 +2,8 @@ server:
   port: 3000
 
 security:
-  jwtsigningkey: XXX
+  jwtsigningkey: XXXXXX
+
+database:
+  name: XXXXXX
+  hostname: localhost

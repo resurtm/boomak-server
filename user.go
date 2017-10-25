@@ -14,7 +14,7 @@ type User struct {
 	Email    string
 }
 
-func ValidateUserJson(json map[string]interface{}) (bool, []gojsonschema.ResultError) {
+func ValidateUserJson(json map[string]interface{}) []gojsonschema.ResultError {
 	currDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		log.Fatal(err)
@@ -29,8 +29,8 @@ func ValidateUserJson(json map[string]interface{}) (bool, []gojsonschema.ResultE
 	}
 
 	if result.Valid() {
-		return true, nil
+		return nil
 	} else {
-		return false, result.Errors()
+		return result.Errors()
 	}
 }

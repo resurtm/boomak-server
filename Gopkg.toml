@@ -20,3 +20,15 @@ required = ["github.com/resurtm/gin"]
 [[constraint]]
   branch = "master"
   name = "github.com/xeipuuv/gojsonschema"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/mitchellh/mapstructure"
+
+[[constraint]]
+  branch = "v2-unstable"
+  name = "github.com/go-mgo/mgo"
+
+[[constraint]]
+  branch = "v2"
+  name = "gopkg.in/mgo.v2"

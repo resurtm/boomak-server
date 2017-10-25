@@ -63,6 +63,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/mitchellh/mapstructure"
+  packages = ["."]
+  revision = "06020f85339e21b2478f756a78e295255ffa4d6a"
+
+[[projects]]
+  branch = "master"
   name = "github.com/resurtm/gin"
   packages = ["."]
   revision = "a6a38c9daed4158062a00761308cf86352a9ac23"
@@ -86,6 +92,12 @@
   revision = "212d8a0df7acfab8bdd190a7a69f0ab7376edcc8"
 
 [[projects]]
+  branch = "v2"
+  name = "gopkg.in/mgo.v2"
+  packages = [".","bson","internal/json","internal/sasl","internal/scram"]
+  revision = "3f83fa5005286a7fe593b055f0d7771a7dce4655"
+
+[[projects]]
   name = "gopkg.in/urfave/cli.v1"
   packages = ["."]
   revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
@@ -100,6 +112,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "b77032557c0eff2a4488ff7a79671bf3b7e32dfecd66c41cb60a8cb14aab81e1"
+  inputs-digest = "897ed44da58040a44262ec4afd2a654de9f51edac05c0e24568f9090cb2a6e7b"
   solver-name = "gps-cdcl"
   solver-version = 1

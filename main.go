@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"os"
 	"net/http"
-
 	"github.com/gorilla/mux"
 	"github.com/gorilla/handlers"
 )
 
 func main() {
 	loadConfig()
+	connectToDb()
+	initHttp()
+}
 
+func initHttp() {
 	router := mux.NewRouter()
 
 	router.Handle("/auth", http.HandlerFunc(authHandler)).Methods("GET")

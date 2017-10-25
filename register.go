@@ -2,25 +2,35 @@ package main
 
 import (
 	"net/http"
-
 	"encoding/json"
-	"fmt"
+	"github.com/mitchellh/mapstructure"
 )
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
-	var document map[string]interface{}
-	if err := json.NewDecoder(r.Body).Decode(&document); err != nil {
+	var data map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
+		return
 	}
 
-	res, _ := ValidateUserJson(document)
-	fmt.Printf("\n%+v\n", res)
-	fmt.Printf("\n%+v\n", document)
+	if err := ValidateUserJson(data); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("JSON schema validation failed"))
+		return
+	}
 
-	if res {
-		w.Write([]byte("good"))
-	} else {
-		w.Write([]byte("bad"))
+	var user User
+	if err := mapstructure.Decode(data, &user); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	collection := db.C("user")
+	if err := collection.Insert(&user); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
 	}
 }

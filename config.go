@@ -9,6 +9,10 @@ type configType struct {
 	Security struct {
 		JwtSigningKey string `required:"true"`
 	}
+	Database struct {
+		Name string `required:"true"`
+		Hostname string `required:"true" default:"localhost"`
+	}
 }
 
 const configFileName = "config.yml"

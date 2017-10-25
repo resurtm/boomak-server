@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "description": "Validates User struct/object data",
+  "description": "Validates AuthEntry struct/object data",
   "type": "object",
   "properties": {
     "username": {
@@ -9,23 +9,16 @@
       "maxLength": 50,
       "pattern": "^[A-Za-z0-9_-]{5,50}$"
     },
-    "email": {
-      "type": "string",
-      "minLength": 5,
-      "maxLength": 50,
-      "format": "email"
-    },
     "password": {
       "type": "string",
       "minLength": 6,
       "maxLength": 255
     }
   },
-  "minProperties": 3,
-  "maxProperties": 3,
+  "minProperties": 2,
+  "maxProperties": 2,
   "required": [
     "username",
-    "email",
     "password"
   ]
 }

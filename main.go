@@ -17,7 +17,7 @@ func main() {
 func initHttp() {
 	router := mux.NewRouter()
 
-	router.Handle("/auth", http.HandlerFunc(authHandler)).Methods("GET")
+	router.Handle("/auth", http.HandlerFunc(authHandler)).Methods("POST")
 	router.Handle("/register", http.HandlerFunc(registerHandler)).Methods("POST")
 
 	listenAddr := fmt.Sprintf(":%d", config.Server.Port)

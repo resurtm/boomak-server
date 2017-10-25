@@ -92,6 +92,12 @@
   revision = "212d8a0df7acfab8bdd190a7a69f0ab7376edcc8"
 
 [[projects]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+  packages = ["bcrypt","blowfish"]
+  revision = "2509b142fb2b797aa7587dad548f113b2c0f20ce"
+
+[[projects]]
   branch = "v2"
   name = "gopkg.in/mgo.v2"
   packages = [".","bson","internal/json","internal/sasl","internal/scram"]
@@ -112,6 +118,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "897ed44da58040a44262ec4afd2a654de9f51edac05c0e24568f9090cb2a6e7b"
+  inputs-digest = "62fb7367d14ffdcb5718e111998cff2aaad0048f5097bf90134ef9dc6780423b"
   solver-name = "gps-cdcl"
   solver-version = 1

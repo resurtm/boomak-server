@@ -9,9 +9,10 @@ import (
 )
 
 type User struct {
-	Id       int
-	Username string
-	Email    string
+	Id       int    `json:"id" bson:"_id,omitempty"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 func ValidateUserJson(json map[string]interface{}) []gojsonschema.ResultError {

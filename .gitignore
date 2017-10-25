@@ -1,0 +1,5 @@
+/vendor/*
+!/vendor/.gitkeep
+/config.yml
+/.idea/
+/gin-bin

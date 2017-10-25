@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "description": "Validates User struct/object data",
+  "type": "object",
+  "properties": {
+    "username": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 50,
+      "pattern": "^[A-Za-z0-9_-]{5,50}$"
+    },
+    "email": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 50,
+      "format": "email"
+    }
+  },
+  "minProperties": 2,
+  "maxProperties": 2,
+  "required": [
+    "username",
+    "email"
+  ]
+}

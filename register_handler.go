@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"github.com/mitchellh/mapstructure"
 	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,6 +21,15 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	if err := mapstructure.Decode(data, &user); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
+		return
+	}
+
+	find := bson.M{"$or": []bson.M{
+		{"username": user.Username},
+		{"email": user.Email},
+	}}
+	if n, err := UserCol.Find(find).Count(); n != 0 || err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 

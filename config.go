@@ -13,11 +13,12 @@ type ConfigType struct {
 		JwtSigningKey string `required:"true"`
 	}
 	Database struct {
-		User     string `required:"true"`
-		Password string `required:"true"`
-		Hostname string `required:"true" default:"localhost"`
-		Port     uint   `required:"true" default:"27017"`
-		Name     string `required:"true"`
+		User       string `required:"true"`
+		Password   string `required:"true"`
+		Hostname   string `required:"true" default:"localhost"`
+		Port       uint   `required:"true" default:"27017"`
+		Name       string `required:"true"`
+		NoPassword bool   `required:"true" default:"false"`
 	}
 }
 

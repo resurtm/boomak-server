@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"os"
 	"github.com/xeipuuv/gojsonschema"
+	"github.com/rs/cors"
 )
 
 const jsonSchemaDir = "json_schema"
@@ -35,4 +36,12 @@ func ValidateHandlerData(w http.ResponseWriter, jsonData map[string]interface{},
 		panic(err)
 	}
 	return result.Valid()
+}
+
+func SetupCors(handler http.Handler) http.Handler {
+	c := cors.New(cors.Options{
+		AllowedOrigins: Config.Cors.Origins,
+		Debug:          Config.Cors.Debug,
+	})
+	return c.Handler(handler)
 }

@@ -1,6 +1,9 @@
 package main
 
-import "github.com/jinzhu/configor"
+import (
+	"github.com/jinzhu/configor"
+	"fmt"
+)
 
 const ConfigFileName = "config.yml"
 
@@ -20,11 +23,16 @@ type ConfigType struct {
 		Name       string `required:"true"`
 		NoPassword bool   `required:"true" default:"false"`
 	}
+	Cors struct {
+		Origins []string ``
+		Debug   bool     `required:"true" default:"false"`
+	}
 }
 
 var Config ConfigType
 
 func LoadConfig() ConfigType {
 	configor.Load(&Config, ConfigFileName)
+	fmt.Println(Config.Cors)
 	return Config
 }

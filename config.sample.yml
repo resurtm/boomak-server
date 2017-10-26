@@ -14,3 +14,7 @@ database:
   port: 27017
   name: XXXXXX
   nopassword: -
+
+cors:
+  origins: []
+  debug: false

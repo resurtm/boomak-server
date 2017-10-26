@@ -71,7 +71,13 @@
   branch = "master"
   name = "github.com/resurtm/gin"
   packages = ["."]
-  revision = "a6a38c9daed4158062a00761308cf86352a9ac23"
+  revision = "8d938268dc44a3a3b28316fdb6148b02852b2af6"
+
+[[projects]]
+  name = "github.com/rs/cors"
+  packages = ["."]
+  revision = "7af7a1e09ba336d2ea14b1ce73bf693c6837dbf6"
+  version = "v1.2"
 
 [[projects]]
   branch = "master"
@@ -118,6 +124,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "00db11da3cacabb833ccdaf9e85bd398946bc4260a9056cb610eb021b779b127"
+  inputs-digest = "9cee2824e4054c47c333300ba65ea5bb3f8f3e7dd054a926aa6c1f2ce52d476a"
   solver-name = "gps-cdcl"
   solver-version = 1

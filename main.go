@@ -15,12 +15,15 @@ func main() {
 }
 
 func InitHttp() {
-	router := mux.NewRouter()
+	r := mux.NewRouter()
 
-	router.Handle("/auth", http.HandlerFunc(AuthHandler)).Methods("POST")
-	router.Handle("/register", http.HandlerFunc(RegisterHandler)).Methods("POST")
+	r.Handle("/auth", http.HandlerFunc(AuthHandler)).Methods("POST")
+	r.Handle("/register", http.HandlerFunc(RegisterHandler)).Methods("POST")
 
 	listenAddr := fmt.Sprintf("%s:%d", Config.Server.Hostname, Config.Server.Port)
 	fmt.Printf("Listening at \"%s\"...\n", listenAddr)
-	http.ListenAndServe(listenAddr, handlers.LoggingHandler(os.Stdout, router))
+
+	h1 := SetupCors(r)
+	h2 := handlers.LoggingHandler(os.Stdout, h1)
+	http.ListenAndServe(listenAddr, h2)
 }

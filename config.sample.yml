@@ -10,11 +10,18 @@ security:
 database:
   user: XXXXXX
   password: XXXXXX
-  hostname: localhost
+  hostname: 127.0.0.1
   port: 27017
   name: XXXXXX
-  nopassword: -
+  nopassword: false
 
 cors:
   origins: []
+  debug: false
+
+mailing:
+  accesskeyid: XXXXX
+  secretaccesskey: XXXXX
+  awsregion: eu-west-1
+  enabletests: false
   debug: false

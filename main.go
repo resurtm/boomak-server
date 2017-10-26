@@ -11,6 +11,7 @@ import (
 func main() {
 	LoadConfig()
 	ConnectToDb()
+	InitMailing()
 	InitHttp()
 }
 

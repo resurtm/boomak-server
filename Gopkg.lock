@@ -14,6 +14,12 @@
   version = "v0.3.0"
 
 [[projects]]
+  name = "github.com/aws/aws-sdk-go"
+  packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/stscreds","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/shareddefaults","private/protocol","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/xml/xmlutil","service/ses","service/ses/sesiface","service/sts"]
+  revision = "f426770fd5a4bae6186b280d4af7dca83a4cdef4"
+  version = "v1.12.17"
+
+[[projects]]
   branch = "master"
   name = "github.com/codegangsta/envy"
   packages = ["lib"]
@@ -30,6 +36,12 @@
   packages = ["."]
   revision = "dbeaa9332f19a944acb5736b4456cfcc02140e29"
   version = "v3.1.0"
+
+[[projects]]
+  name = "github.com/go-ini/ini"
+  packages = ["."]
+  revision = "5b3e00af70a9484542169a976dcab8d03e601a17"
+  version = "v1.30.0"
 
 [[projects]]
   name = "github.com/gorilla/context"
@@ -56,6 +68,11 @@
   revision = "6c409036e1aea1420f2e1a196f95c0e3c4aef091"
 
 [[projects]]
+  name = "github.com/jmespath/go-jmespath"
+  packages = ["."]
+  revision = "0b12d6b5"
+
+[[projects]]
   name = "github.com/mattn/go-shellwords"
   packages = ["."]
   revision = "02e3cf038dcea8290e44424da473dd12be796a8a"
@@ -78,6 +95,12 @@
   packages = ["."]
   revision = "7af7a1e09ba336d2ea14b1ce73bf693c6837dbf6"
   version = "v1.2"
+
+[[projects]]
+  name = "github.com/tj/go-ses"
+  packages = ["."]
+  revision = "be9cd304cb85d95df46846fab40bee9e763f9fe6"
+  version = "v2.0.1"
 
 [[projects]]
   branch = "master"
@@ -124,6 +147,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9cee2824e4054c47c333300ba65ea5bb3f8f3e7dd054a926aa6c1f2ce52d476a"
+  inputs-digest = "c5d17b742275de623909faf6e1c4c649f07b96be63313464eb52c65a68c20dd1"
   solver-name = "gps-cdcl"
   solver-version = 1

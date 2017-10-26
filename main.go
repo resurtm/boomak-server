@@ -19,6 +19,7 @@ func InitHttp() {
 
 	r.Handle("/auth", http.HandlerFunc(AuthHandler)).Methods("POST")
 	r.Handle("/register", http.HandlerFunc(RegisterHandler)).Methods("POST")
+	r.Handle("/validate", http.HandlerFunc(ValidateHandler)).Methods("POST")
 
 	listenAddr := fmt.Sprintf("%s:%d", Config.Server.Hostname, Config.Server.Port)
 	fmt.Printf("Listening at \"%s\"...\n", listenAddr)

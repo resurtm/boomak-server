@@ -1,5 +1,4 @@
-#required = ["github.com/codegangsta/gin"]
-required = ["github.com/resurtm/gin"]
+required = ["github.com/codegangsta/gin"]
 
 [[constraint]]
   name = "github.com/gorilla/handlers"

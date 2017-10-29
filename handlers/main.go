@@ -12,9 +12,9 @@ import (
 func New() http.Handler {
 	r := mux.NewRouter()
 
-	r.Handle("/v1/auth", http.HandlerFunc(authHandler)).Methods("POST")
+	r.Handle("/v1/login", http.HandlerFunc(authHandler)).Methods("POST")
 	r.Handle("/v1/register", http.HandlerFunc(signupHandler)).Methods("POST")
-	r.Handle("/v1/validate", http.HandlerFunc(validateHandler)).Methods("POST")
+	r.Handle("/v1/check", http.HandlerFunc(validateHandler)).Methods("POST")
 
 	h := setupCORS(r)
 	if config.Config().Server.DebugOutput {

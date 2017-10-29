@@ -7,6 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"github.com/mitchellh/mapstructure"
 	"github.com/resurtm/boomak-server/database"
+	"github.com/resurtm/boomak-server/mailing"
 )
 
 func signupHandler(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +51,6 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
-		// todo: enqueue sign up email
+		mailing.SendSignupEmail(user)
 	}
 }

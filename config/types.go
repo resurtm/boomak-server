@@ -36,7 +36,7 @@ type configType struct {
 		EnableTestMailer bool ``
 		Debug            bool ``
 
-		WorkerCount     uint `default:"2"`
+		WorkerCount     byte `default:"2"`
 		WorkerQueueSize uint `default:"255"`
 	}
 }

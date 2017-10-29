@@ -11,6 +11,7 @@ type configType struct {
 
 	Security struct {
 		JWTSigningKey string `required:"true"`
+		JSONSchemaDir string `default:"jsonSchema"`
 	}
 
 	Database struct {

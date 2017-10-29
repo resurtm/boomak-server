@@ -11,6 +11,9 @@ func mailWorker(workerID byte, ch <-chan database.User) {
 	if cfg.Config().Mailing.Debug {
 		fmt.Printf("Mail worker #%d: started!\n", workerID)
 	}
+
+	client := newClient()
+
 	for {
 		user := <-ch
 		if cfg.Config().Mailing.Debug {
@@ -25,7 +28,7 @@ func mailWorker(workerID byte, ch <-chan database.User) {
 			HTML:    "<h1>Welcome to Boomak!</h1>",
 		}
 
-		if err := client(workerID).SendEmail(email); err != nil {
+		if err := client.SendEmail(email); err != nil {
 			fmt.Printf("Mail worker #%d: failure: %s\n", workerID, err.Error())
 		}
 

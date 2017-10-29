@@ -2,26 +2,29 @@
 
 server:
   hostname: localhost
-  port: 3150
+  port: 3151
+  debugoutput: true
 
 security:
-  jwtsigningkey: XXXXXX
+  jwtsigningkey: XXX
 
 database:
-  user: XXXXXX
-  password: XXXXXX
-  hostname: 127.0.0.1
+  user: boomak_user
+  password: 123123
+  hostname: localhost
   port: 27017
-  name: XXXXXX
-  nopassword: false
+  name: boomak
+  nopassword: true
 
 cors:
-  origins: []
+  origins:
+    - chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop
+    - http://127.0.0.1:3250
   debug: false
 
 mailing:
-  accesskeyid: XXXXX
-  secretaccesskey: XXXXX
+  accesskeyid: XXX
+  secretaccesskey: XXX
   awsregion: eu-west-1
-  enabletests: false
-  debug: false
+  enabletestmailer: true
+  debug: true

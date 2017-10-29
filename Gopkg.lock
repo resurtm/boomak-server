@@ -28,7 +28,7 @@
 [[projects]]
   branch = "master"
   name = "github.com/codegangsta/gin"
-  packages = ["lib"]
+  packages = [".","lib"]
   revision = "01243699c19287f0eaccc8f2de4a46ff7ec3ba91"
 
 [[projects]]
@@ -83,12 +83,6 @@
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
   revision = "06020f85339e21b2478f756a78e295255ffa4d6a"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/resurtm/gin"
-  packages = ["."]
-  revision = "8d938268dc44a3a3b28316fdb6148b02852b2af6"
 
 [[projects]]
   name = "github.com/rs/cors"
@@ -147,6 +141,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c5d17b742275de623909faf6e1c4c649f07b96be63313464eb52c65a68c20dd1"
+  inputs-digest = "2c450ade686b7f70de700c86aa462013cc97da9076c1a5ebb0a8de34f20be0da"
   solver-name = "gps-cdcl"
   solver-version = 1

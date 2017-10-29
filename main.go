@@ -1,26 +1,25 @@
 package main
 
 import (
+	"github.com/resurtm/boomak-server/config"
 	"fmt"
-	"os"
-	"net/http"
-	"github.com/gorilla/mux"
-	"github.com/gorilla/handlers"
 )
 
 func main() {
-	LoadConfig()
-	ConnectToDb()
-	InitMailing()
-	InitHttp()
+	fmt.Println("%+v\n", config.Config())
+
+	//router := hs.NewRouter()
+
+	//LoadConfig()
+	//ConnectToDb()
+	//InitMailing()
+	//InitHttp()
 }
 
-func InitHttp() {
-	r := mux.NewRouter()
+/*func InitHttp() {
 
-	r.Handle("/auth", http.HandlerFunc(AuthHandler)).Methods("POST")
-	r.Handle("/register", http.HandlerFunc(RegisterHandler)).Methods("POST")
-	r.Handle("/validate", http.HandlerFunc(ValidateHandler)).Methods("POST")
+
+
 
 	listenAddr := fmt.Sprintf("%s:%d", Config.Server.Hostname, Config.Server.Port)
 	fmt.Printf("Listening at \"%s\"...\n", listenAddr)
@@ -29,3 +28,4 @@ func InitHttp() {
 	h2 := handlers.LoggingHandler(os.Stdout, h1)
 	http.ListenAndServe(listenAddr, h2)
 }
+*/

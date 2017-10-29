@@ -11,7 +11,7 @@ func (m *awsCredsProvider) Retrieve() (credentials.Value, error) {
 	return credentials.Value{
 		AccessKeyID:     config.Config().Mailing.AccessKeyID,
 		SecretAccessKey: config.Config().Mailing.SecretAccessKey,
-		ProviderName:    "AWSCredsProvider",
+		ProviderName:    "awsCredsProvider",
 	}, nil
 }
 

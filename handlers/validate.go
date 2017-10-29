@@ -5,4 +5,5 @@ import (
 )
 
 func validateHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("validate handler"))
 }

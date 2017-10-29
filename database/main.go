@@ -13,10 +13,10 @@ func New() *sessionType {
 		if session, err := mgo.Dial(dsn()); err != nil {
 			panic(err)
 		} else {
-			mainSession = &sessionType{S: session}
+			mainSession = &sessionType{Session: session}
 		}
 	}
-	return &sessionType{S: mainSession.S.New()}
+	return &sessionType{Session: mainSession.New()}
 }
 
 func dsn() string {

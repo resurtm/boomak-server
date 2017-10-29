@@ -2,16 +2,15 @@ package handlers
 
 import (
 	"net/http"
-	"github.com/mitchellh/mapstructure"
-	"github.com/resurtm/boomak-server/database"
 	"encoding/json"
 	"gopkg.in/mgo.v2/bson"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/mitchellh/mapstructure"
+	"github.com/resurtm/boomak-server/database"
 )
 
 func authHandler(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
-
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -29,10 +28,10 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session := database.New()
-	defer session.S.Close()
+	defer session.Close()
 
 	var user database.User
-	if err := session.C("user").Find(bson.M{"username": authEntry.Username}).One(&user); err != nil {
+	if err := session.Col("user").Find(bson.M{"username": authEntry.Username}).One(&user); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

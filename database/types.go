@@ -6,11 +6,12 @@ import (
 )
 
 type sessionType struct {
-	S *mgo.Session
+	*mgo.Session
 }
 
-func (session *sessionType) C(name string) *mgo.Collection {
-	return session.S.DB(config.Config().Database.Name).C(name)
+// Get rid of DB(...) call when trying to achieve *mgo.Collection instance.
+func (session *sessionType) Col(name string) *mgo.Collection {
+	return session.DB(config.Config().Database.Name).C(name)
 }
 
 type AuthEntry struct {

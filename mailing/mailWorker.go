@@ -5,11 +5,6 @@ import (
 	tj "github.com/tj/go-ses"
 	"github.com/resurtm/boomak-server/database"
 	cfg "github.com/resurtm/boomak-server/config"
-	"bytes"
-	ht "html/template"
-	tt "text/template"
-	"github.com/resurtm/boomak-server/tools"
-	"path/filepath"
 )
 
 func mailWorker(workerID byte, ch <-chan mailJob) {
@@ -60,40 +55,18 @@ func prepareTestEmail(job mailJobTestType) tj.Email {
 }
 
 func prepareSignupEmail(user database.User) tj.Email {
-	tplData := struct {
+	data := struct {
 		User database.User
 	}{
 		User: user,
-	}
-
-	// text part
-	textTpl, err := tt.ParseFiles(filepath.Join(tools.CurrentDir(), "templates", "mailJobSignup.txt"))
-	if err != nil {
-		panic(err)
-	}
-
-	var textTplBytes bytes.Buffer
-	if err := textTpl.Execute(&textTplBytes, tplData); err != nil {
-		panic(err)
-	}
-
-	// html part
-	tpl, err := ht.ParseFiles(filepath.Join(tools.CurrentDir(), "templates", "mailJobSignup.html"))
-	if err != nil {
-		panic(err)
-	}
-
-	var tplBytes bytes.Buffer
-	if err := tpl.Execute(&tplBytes, tplData); err != nil {
-		panic(err)
 	}
 
 	return tj.Email{
 		From:    cfg.Config().Mailing.FromEmail,
 		To:      []string{user.Email},
 		Subject: "Welcome to Boomak!",
-		Text:    textTplBytes.String(),
-		HTML:    tplBytes.String(),
+		Text:    renderTextTemplate("mailJobSignup", data),
+		HTML:    renderHtmlTemplate("mailJobSignup", data),
 	}
 }
 

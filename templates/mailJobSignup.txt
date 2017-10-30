@@ -1,0 +1,7 @@
+Welcome to Boomak!
+==================
+
+You have successfully signed up to Boomak bookmarks management app!
+
+Please use the following secret code to verify your email in Boomak app:
+{{.User.EmailVerificationToken}}

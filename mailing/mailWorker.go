@@ -6,7 +6,8 @@ import (
 	"github.com/resurtm/boomak-server/database"
 	cfg "github.com/resurtm/boomak-server/config"
 	"bytes"
-	"html/template"
+	ht "html/template"
+	tt "text/template"
 	"github.com/resurtm/boomak-server/tools"
 	"path/filepath"
 )
@@ -59,19 +60,31 @@ func prepareTestEmail(job mailJobTestType) tj.Email {
 }
 
 func prepareSignupEmail(user database.User) tj.Email {
-	t, err := template.ParseFiles(filepath.Join(tools.CurrentDir(), "templates", "mailJobSignup.html"))
+	tplData := struct {
+		User database.User
+	}{
+		User: user,
+	}
+
+	// text part
+	textTpl, err := tt.ParseFiles(filepath.Join(tools.CurrentDir(), "templates", "mailJobSignup.txt"))
 	if err != nil {
 		panic(err)
 	}
 
-	data := struct {
-		Key string
-	}{
-		Key: "test string",
+	var textTplBytes bytes.Buffer
+	if err := textTpl.Execute(&textTplBytes, tplData); err != nil {
+		panic(err)
 	}
 
-	var tpl bytes.Buffer
-	if err := t.Execute(&tpl, data); err != nil {
+	// html part
+	tpl, err := ht.ParseFiles(filepath.Join(tools.CurrentDir(), "templates", "mailJobSignup.html"))
+	if err != nil {
+		panic(err)
+	}
+
+	var tplBytes bytes.Buffer
+	if err := tpl.Execute(&tplBytes, tplData); err != nil {
 		panic(err)
 	}
 
@@ -79,8 +92,8 @@ func prepareSignupEmail(user database.User) tj.Email {
 		From:    cfg.Config().Mailing.FromEmail,
 		To:      []string{user.Email},
 		Subject: "Welcome to Boomak!",
-		Text:    "Welcome to Boomak!",
-		HTML:    tpl.String(),
+		Text:    textTplBytes.String(),
+		HTML:    tplBytes.String(),
 	}
 }
 

@@ -26,5 +26,6 @@ mailing:
   accesskeyid: XXX
   secretaccesskey: XXX
   awsregion: eu-west-1
-  enabletestmailer: true
+  enabletestmailing: true
   debug: true
+  fromemail: hello@world.com

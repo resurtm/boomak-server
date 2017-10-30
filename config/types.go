@@ -33,11 +33,13 @@ type configType struct {
 		SecretAccessKey string `required:"true"`
 		AWSRegion       string `required:"true"`
 
-		EnableTestMailer bool ``
-		Debug            bool ``
+		EnableTestMailing bool ``
+		Debug             bool ``
 
 		WorkerCount     byte `default:"2"`
 		WorkerQueueSize uint `default:"255"`
+
+		FromEmail string `required:"true"`
 	}
 }
 

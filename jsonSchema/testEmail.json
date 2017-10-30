@@ -1,15 +1,15 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "description": "Validates authentication data",
+  "description": "Validates test email job data",
   "type": "object",
   "properties": {
-    "username": {
+    "recipientEmail": {
       "type": "string",
       "minLength": 5,
       "maxLength": 50,
-      "pattern": "^[A-Za-z0-9_-]{5,50}$"
+      "format": "email"
     },
-    "password": {
+    "testString": {
       "type": "string",
       "minLength": 6,
       "maxLength": 255
@@ -18,7 +18,7 @@
   "minProperties": 2,
   "maxProperties": 2,
   "required": [
-    "username",
-    "password"
+    "recipientEmail",
+    "testString"
   ]
 }

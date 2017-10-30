@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/handlers"
 	"github.com/rs/cors"
-	"github.com/resurtm/boomak-server/config"
+	cfg "github.com/resurtm/boomak-server/config"
 )
 
 func New() http.Handler {
@@ -15,9 +15,12 @@ func New() http.Handler {
 	r.Handle("/v1/login", http.HandlerFunc(authHandler)).Methods("POST")
 	r.Handle("/v1/register", http.HandlerFunc(signupHandler)).Methods("POST")
 	r.Handle("/v1/check", http.HandlerFunc(validateHandler)).Methods("POST")
+	if cfg.Config().Mailing.EnableTestMailing {
+		r.Handle("/v1/test-email", http.HandlerFunc(testEmailHandler)).Methods("POST")
+	}
 
 	h := setupCORS(r)
-	if config.Config().Server.DebugOutput {
+	if cfg.Config().Server.DebugOutput {
 		h = handlers.LoggingHandler(os.Stdout, h)
 	}
 	return h
@@ -25,8 +28,8 @@ func New() http.Handler {
 
 func setupCORS(handler http.Handler) http.Handler {
 	c := cors.New(cors.Options{
-		AllowedOrigins: config.Config().CORS.Origins,
-		Debug:          config.Config().CORS.Debug,
+		AllowedOrigins: cfg.Config().CORS.Origins,
+		Debug:          cfg.Config().CORS.Debug,
 	})
 	return c.Handler(handler)
 }

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "description": "Validates User struct/object data",
+  "description": "Validates user signup data",
   "type": "object",
   "properties": {
     "username": {

@@ -32,6 +32,7 @@ func New() http.Handler {
 func setupCORS(handler http.Handler) http.Handler {
 	c := cors.New(cors.Options{
 		AllowedOrigins: cfg.Config().CORS.Origins,
+		AllowedHeaders: []string{"Content-Type", "Authorization"},
 		Debug:          cfg.Config().CORS.Debug,
 	})
 	return c.Handler(handler)

@@ -57,9 +57,7 @@ func prepareTestEmail(job mailJobTestType) tj.Email {
 func prepareSignupEmail(user database.User) tj.Email {
 	data := struct {
 		User database.User
-	}{
-		User: user,
-	}
+	}{User: user}
 
 	return tj.Email{
 		From:    cfg.Config().Mailing.FromEmail,

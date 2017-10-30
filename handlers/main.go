@@ -15,6 +15,9 @@ func New() http.Handler {
 	r.Handle("/v1/login", http.HandlerFunc(authHandler)).Methods("POST")
 	r.Handle("/v1/register", http.HandlerFunc(signupHandler)).Methods("POST")
 	r.Handle("/v1/check", http.HandlerFunc(validateHandler)).Methods("POST")
+
+	r.Handle("/v1/test-action", authMiddleware(http.HandlerFunc(testActionHandler))).Methods("POST")
+
 	if cfg.Config().Mailing.EnableTestMailing {
 		r.Handle("/v1/test-email", http.HandlerFunc(testEmailHandler)).Methods("POST")
 	}

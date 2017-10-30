@@ -9,7 +9,7 @@ import (
 
 func testEmailHandler(w http.ResponseWriter, r *http.Request) {
 	if !cfg.Config().Mailing.EnableTestMailing {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"os"
 	"path/filepath"
 	"net/http"
 	"github.com/xeipuuv/gojsonschema"
@@ -9,10 +8,11 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"time"
 	"github.com/resurtm/boomak-server/database"
+	"github.com/resurtm/boomak-server/tools"
 )
 
 func validateHandlerData(data map[string]interface{}, schema string, w http.ResponseWriter) bool {
-	schemaPath := "file://" + filepath.Join(currentDir(), config.Config().Security.JSONSchemaDir, schema+".json")
+	schemaPath := "file://" + filepath.Join(tools.CurrentDir(), config.Config().Security.JSONSchemaDir, schema+".json")
 	schemaLoader := gojsonschema.NewReferenceLoader(schemaPath)
 	documentLoader := gojsonschema.NewGoLoader(data)
 
@@ -21,14 +21,6 @@ func validateHandlerData(data map[string]interface{}, schema string, w http.Resp
 		panic(err)
 	}
 	return result.Valid()
-}
-
-func currentDir() string {
-	currDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		panic(err)
-	}
-	return currDir
 }
 
 func generateJWT(user database.User) (string, error) {

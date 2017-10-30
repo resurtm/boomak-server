@@ -46,6 +46,7 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		user.Password = string(hashed)
 	}
+	user.MakeEmailNonVerified()
 
 	if err := session.Col("user").Insert(&user); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

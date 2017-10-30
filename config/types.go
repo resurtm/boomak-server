@@ -40,6 +40,8 @@ type configType struct {
 		WorkerQueueSize uint `default:"255"`
 
 		FromEmail string `required:"true"`
+
+		VerificationTokenLength byte `required:"false" default:"8"`
 	}
 }
 

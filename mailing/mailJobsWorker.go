@@ -76,7 +76,21 @@ var emailBuilders = map[byte]func(interface{}) tjses.Email{
 
 	// email builder for type signupFinishedMailJob
 	mtypes.SignupFinishedMailJob: func(raw interface{}) tjses.Email {
-		// todo: write code here
-		return tjses.Email{}
+		u, ok := raw.(user.User)
+		if !ok {
+			panic("Invalid job payload has been provided")
+		}
+
+		tplData := struct {
+			User user.User
+		}{User: u}
+
+		return tjses.Email{
+			From:    cfg.C().Mailing.FromEmail,
+			To:      []string{u.Email},
+			Subject: "Boomak: Welcome to Application!",
+			Text:    renderTextTemplate("signupFinishedMail", tplData),
+			HTML:    renderHtmlTemplate("signupFinishedMail", tplData),
+		}
 	},
 }

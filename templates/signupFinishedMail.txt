@@ -1,0 +1,6 @@
+Welcome to Boomak!
+==================
+
+Hi {{.User.Username}}!
+You have successfully signed up and confirmed your email!
+Welcome to bookmarking application. ;-)

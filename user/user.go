@@ -108,5 +108,6 @@ func (user *User) VerifyEmail(key string, session *db.Session) error {
 	if err := session.C("user").Update(query, change); err != nil {
 		return err
 	}
+	jobs.MailJobsQueue <- types.MailJob{Kind: types.SignupFinishedMailJob, Payload: *user}
 	return nil
 }

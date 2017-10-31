@@ -20,12 +20,8 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !u.SetRawPassword(u.Password) || u.Create(session) != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	if u.MakeEmailNonVerified(true, true, session) != nil {
+	if !u.SetRawPassword(u.Password) || u.Create(session) != nil ||
+		u.MakeEmailNonVerified(true, true, session) != nil {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 }

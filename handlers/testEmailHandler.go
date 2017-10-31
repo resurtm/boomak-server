@@ -3,7 +3,8 @@ package handlers
 import (
 	"net/http"
 	"github.com/resurtm/boomak-server/cfg"
-	"github.com/resurtm/boomak-server/mailing"
+	"github.com/resurtm/boomak-server/mailing/jobs"
+	mtypes "github.com/resurtm/boomak-server/mailing/types"
 	"github.com/resurtm/boomak-server/types"
 )
 
@@ -18,5 +19,7 @@ func testEmailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mailing.SendTestEmail(data.RecipientEmail, data.TestString)
+	if cfg.C().Mailing.EnableTestMailer {
+		jobs.MailJobsQueue <- mtypes.MailJob{Kind: mtypes.TestMailJob, Payload: data}
+	}
 }

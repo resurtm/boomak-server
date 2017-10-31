@@ -47,3 +47,7 @@ required = ["github.com/codegangsta/gin"]
 [[constraint]]
   name = "github.com/tj/go-ses"
   version = "2.0.1"
+
+[[constraint]]
+  name = "github.com/fatih/structs"
+  version = "1.0.0"

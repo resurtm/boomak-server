@@ -7,14 +7,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"github.com/dgrijalva/jwt-go"
 	"time"
-	"github.com/resurtm/boomak-server/mailing"
+	"github.com/resurtm/boomak-server/mailing/jobs"
+	"github.com/resurtm/boomak-server/mailing/types"
 	"github.com/resurtm/boomak-server/db"
 )
 
 type User struct {
-	Id       int    `json:"id" bson:"_id,omitempty"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Id       bson.ObjectId `json:"id" bson:"_id,omitempty"`
+	Username string        `json:"username"`
+	Password string        `json:"password"`
 
 	Email                  string `json:"email"`
 	EmailVerified          bool   `json:"email_verified" bson:"email_verified"`
@@ -33,12 +34,20 @@ func (user *User) MakeEmailNonVerified(commit bool, sendEmail bool, session *db.
 			session = db.New()
 			defer session.Close()
 		}
-		if err := session.C(common.UserCollectionName).Update(bson.M{"_id": user.Id}, user); err != nil {
+		query := bson.M{"$and": []bson.M{
+			{"username": user.Username},
+			{"email": user.Email},
+		}}
+		change := bson.M{"$set": bson.M{
+			"email_verified":           user.EmailVerified,
+			"email_verification_token": user.EmailVerificationToken,
+		}}
+		if err := session.C(common.UserCollectionName).Update(query, change); err != nil {
 			return err
 		}
 	}
 	if sendEmail {
-		mailing.SendEmailVerifyEmail(user)
+		jobs.MailJobsQueue <- types.MailJob{Kind: types.EmailVerifyMailJob, Payload: *user}
 	}
 	return nil
 }
@@ -73,6 +82,8 @@ func (user *User) Update(session *db.Session) error {
 func (user *User) Create(session *db.Session) error {
 	if session == nil {
 		session = db.New()
+		defer session.Close()
 	}
-	return session.C(common.UserCollectionName).Insert(&user)
+	user.Id = bson.NewObjectId()
+	return session.C(common.UserCollectionName).Insert(user)
 }

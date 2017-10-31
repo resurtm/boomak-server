@@ -2,48 +2,26 @@ package mailing
 
 import (
 	"github.com/resurtm/boomak-server/cfg"
-	"github.com/resurtm/boomak-server/user"
+	"github.com/resurtm/boomak-server/mailing/types"
+	"github.com/resurtm/boomak-server/mailing/jobs"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	tjses "github.com/tj/go-ses"
+	"github.com/aws/aws-sdk-go/service/ses"
 )
 
-// enum consts for mailJob struct
-const (
-	testMailJob           = iota
-	emailVerifyMailJob    = iota
-	signupFinishedMailJob = iota
-)
-
-type mailJob struct {
-	kind    byte
-	payload interface{}
-}
-
-type testMailJobPayload struct {
-	recipient string
-	data      string
-}
-
-var mailJobsQueue chan mailJob
-
-func init() {
-	mailJobsQueue = make(chan mailJob, cfg.C().Mailing.WorkerQueueSize)
+func InitMailing() {
+	jobs.MailJobsQueue = make(chan types.MailJob, cfg.C().Mailing.WorkerQueueSize)
 	for i := byte(1); i <= cfg.C().Mailing.WorkerCount; i++ {
-		go mailJobsWorker(i, mailJobsQueue)
+		go mailJobsWorker(i, jobs.MailJobsQueue)
 	}
 }
 
-func SendTestEmail(recipientEmail string, str string) {
-	if cfg.C().Mailing.EnableTestMailer {
-		mailJobsQueue <- mailJob{
-			kind:    testMailJob,
-			payload: testMailJobPayload{recipient: recipientEmail, data: str},
-		}
-	}
-}
-
-func SendEmailVerifyEmail(user *user.User) {
-	mailJobsQueue <- mailJob{kind: emailVerifyMailJob, payload: user}
-}
-
-func SendSignupFinishedEmail(user *user.User) {
-	mailJobsQueue <- mailJob{kind: signupFinishedMailJob, payload: user}
+func newClient() *tjses.Client {
+	creds := credentials.NewCredentials(&awsCredentialsProvider{})
+	config := aws.NewConfig().
+		WithRegion(cfg.C().Mailing.AWSRegion).
+		WithCredentials(creds)
+	return tjses.New(ses.New(session.New(config)))
 }

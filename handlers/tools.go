@@ -18,7 +18,7 @@ func processHandlerData(container interface{}, schema string, w http.ResponseWri
 	}
 
 	// step 2 - validate schema
-	schemaPath := "file://" + filepath.Join(common.CurrentDir(), common.JSONSchemaDir, schema+".json")
+	schemaPath := "file://" + filepath.Join(common.CurrentDir(), "jsonSchema", schema+".json")
 	result, err := gojsonschema.Validate(gojsonschema.NewReferenceLoader(schemaPath), gojsonschema.NewGoLoader(data))
 	if err != nil || !result.Valid() {
 		w.WriteHeader(http.StatusBadRequest)

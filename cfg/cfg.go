@@ -2,8 +2,9 @@ package cfg
 
 import (
 	"github.com/jinzhu/configor"
-	"github.com/resurtm/boomak-server/common"
 )
+
+const mainConfigFileName = "config.yml"
 
 var mainConfig configuration
 
@@ -12,7 +13,7 @@ func C() configuration {
 }
 
 func init() {
-	if err := configor.Load(&mainConfig, common.MainConfigFileName); err != nil {
+	if err := configor.Load(&mainConfig, mainConfigFileName); err != nil {
 		panic(err)
 	}
 }

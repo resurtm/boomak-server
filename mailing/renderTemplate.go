@@ -9,9 +9,11 @@ import (
 	"fmt"
 )
 
+const emailTemplatesDir = "templates"
+
 func renderTextTemplate(name string, data interface{}) string {
 	tpl, err := text.ParseFiles(
-		filepath.Join(common.CurrentDir(), common.EmailTemplatesDir, fmt.Sprintf("%s.txt", name)),
+		filepath.Join(common.CurrentDir(), emailTemplatesDir, fmt.Sprintf("%s.txt", name)),
 	)
 	if err != nil {
 		panic(err)
@@ -26,7 +28,7 @@ func renderTextTemplate(name string, data interface{}) string {
 
 func renderHtmlTemplate(name string, data interface{}) string {
 	tpl, err := html.ParseFiles(
-		filepath.Join(common.CurrentDir(), common.EmailTemplatesDir, fmt.Sprintf("%s.html", name)),
+		filepath.Join(common.CurrentDir(), emailTemplatesDir, fmt.Sprintf("%s.html", name)),
 	)
 	if err != nil {
 		panic(err)

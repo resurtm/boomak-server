@@ -2,7 +2,6 @@ package user
 
 import (
 	"gopkg.in/mgo.v2/bson"
-	"github.com/resurtm/boomak-server/common"
 	"github.com/dgrijalva/jwt-go"
 	"fmt"
 	"github.com/resurtm/boomak-server/cfg"
@@ -15,7 +14,20 @@ func FindByUsername(username string, session *db.Session) (*User, error) {
 		defer session.Close()
 	}
 	var user User
-	if err := session.C(common.UserCollectionName).Find(bson.M{"username": username}).One(&user); err != nil {
+	if err := session.C("user").Find(bson.M{"username": username}).One(&user); err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func FindByUsernameAndEmail(username string, email string, session *db.Session) (*User, error) {
+	if session == nil {
+		session = db.New()
+		defer session.Close()
+	}
+	var user User
+	query := bson.M{"username": username, "email": email}
+	if err := session.C("user").Find(query).One(&user); err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -38,7 +50,7 @@ func existsByUsernameAndOrEmail(username string, email string, session *db.Sessi
 		{"username": username},
 		{"email": email},
 	}}
-	if n, err := session.C(common.UserCollectionName).Find(query).Count(); err != nil {
+	if n, err := session.C("user").Find(query).Count(); err != nil {
 		return false, err
 	} else {
 		return n != 0, nil

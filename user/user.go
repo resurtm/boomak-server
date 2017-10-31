@@ -42,7 +42,7 @@ func (user *User) MakeEmailNonVerified(commit bool, sendEmail bool, session *db.
 			"email_verified":           user.EmailVerified,
 			"email_verification_token": user.EmailVerificationToken,
 		}}
-		if err := session.C(common.UserCollectionName).Update(query, change); err != nil {
+		if err := session.C("user").Update(query, change); err != nil {
 			return err
 		}
 	}
@@ -85,5 +85,5 @@ func (user *User) Create(session *db.Session) error {
 		defer session.Close()
 	}
 	user.Id = bson.NewObjectId()
-	return session.C(common.UserCollectionName).Insert(user)
+	return session.C("user").Insert(user)
 }

@@ -5,7 +5,6 @@ import (
 	tjses "github.com/tj/go-ses"
 	"github.com/resurtm/boomak-server/user"
 	"github.com/resurtm/boomak-server/cfg"
-	"github.com/resurtm/boomak-server/common"
 	mtypes "github.com/resurtm/boomak-server/mailing/types"
 	"github.com/resurtm/boomak-server/types"
 )
@@ -48,7 +47,7 @@ var emailBuilders = map[byte]func(interface{}) tjses.Email{
 			return tjses.Email{
 				From:    cfg.C().Mailing.FromEmail,
 				To:      []string{job.RecipientEmail},
-				Subject: common.TestEmailSubject,
+				Subject: "Boomak: Test Email",
 				Text:    fmt.Sprintf("Boomak Test Email\n\nTest String: %s", job.TestString),
 				HTML:    fmt.Sprintf("<h1>Boomak Test Email</h1><p>Test String: %s</p>", job.TestString),
 			}
@@ -69,7 +68,7 @@ var emailBuilders = map[byte]func(interface{}) tjses.Email{
 		return tjses.Email{
 			From:    cfg.C().Mailing.FromEmail,
 			To:      []string{u.Email},
-			Subject: common.VerifyEmailSubject,
+			Subject: "Boomak: Confirm Your Email",
 			Text:    renderTextTemplate("emailVerifyMail", tplData),
 			HTML:    renderHtmlTemplate("emailVerifyMail", tplData),
 		}

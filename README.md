@@ -16,6 +16,7 @@ Repository | URL | Comment | Language
 boomak-server _**(this repo!)**_| [https://github.com/resurtm/boomak-server](https://github.com/resurtm/boomak-server) | Server backend | Go
 boomak-client | [https://github.com/resurtm/boomak-client](https://github.com/resurtm/boomak-client) | Web based client | JavaScript
 boomak-cli | [https://github.com/resurtm/boomak-cli](https://github.com/resurtm/boomak-cli) | CLI based client | Go
+boomak-clipy | [https://github.com/resurtm/boomak-clipy](https://github.com/resurtm/boomak-clipy) | CLI based client | Python
 
 Launching this Project
 ----------------------

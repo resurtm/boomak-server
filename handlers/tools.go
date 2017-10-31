@@ -4,30 +4,32 @@ import (
 	"path/filepath"
 	"net/http"
 	"github.com/xeipuuv/gojsonschema"
-	"github.com/resurtm/boomak-server/config"
-	"github.com/dgrijalva/jwt-go"
-	"time"
-	"github.com/resurtm/boomak-server/database"
-	"github.com/resurtm/boomak-server/tools"
+	"github.com/resurtm/boomak-server/common"
+	"encoding/json"
+	"github.com/mitchellh/mapstructure"
 )
 
-func validateHandlerData(data map[string]interface{}, schema string, w http.ResponseWriter) bool {
-	schemaPath := "file://" + filepath.Join(tools.CurrentDir(), config.Config().Security.JSONSchemaDir, schema+".json")
-	schemaLoader := gojsonschema.NewReferenceLoader(schemaPath)
-	documentLoader := gojsonschema.NewGoLoader(data)
-
-	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
-	if err != nil {
-		panic(err)
+func processHandlerData(container interface{}, schema string, w http.ResponseWriter, r *http.Request) bool {
+	// step 1 - receive data
+	var data map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return false
 	}
-	return result.Valid()
-}
 
-func generateJWT(user database.User) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["username"] = user.Username
-	claims["email"] = user.Email
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-	return token.SignedString([]byte(config.Config().Security.JWTSigningKey))
+	// step 2 - validate schema
+	schemaPath := "file://" + filepath.Join(common.CurrentDir(), common.JSONSchemaDir, schema+".json")
+	result, err := gojsonschema.Validate(gojsonschema.NewReferenceLoader(schemaPath), gojsonschema.NewGoLoader(data))
+	if err != nil || !result.Valid() {
+		w.WriteHeader(http.StatusBadRequest)
+		return false
+	}
+
+	// step 3 - decode to the necessary structure
+	if err := mapstructure.Decode(data, container); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return false
+	}
+
+	return true
 }

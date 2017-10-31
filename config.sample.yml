@@ -2,8 +2,8 @@
 
 server:
   hostname: localhost
-  port: 3151
-  debugoutput: true
+  port: 3150
+  debug: true
 
 security:
   jwtsigningkey: XXX
@@ -20,12 +20,16 @@ cors:
   origins:
     - chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop
     - http://127.0.0.1:3250
-  debug: false
+    - http://localhost:3250
+  headers:
+    - Content-Type
+    - Authorization
+  debug: true
 
 mailing:
   accesskeyid: XXX
   secretaccesskey: XXX
   awsregion: eu-west-1
-  enabletestmailing: true
+  fromemail: resurtm@gmail.com
+  enabletestmailer: true
   debug: true
-  fromemail: hello@world.com

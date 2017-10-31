@@ -2,15 +2,17 @@ package mailing
 
 import (
 	"path/filepath"
-	"github.com/resurtm/boomak-server/tools"
+	"github.com/resurtm/boomak-server/common"
 	"bytes"
-	ht "html/template"
-	tt "text/template"
+	html "html/template"
+	text "text/template"
 	"fmt"
 )
 
 func renderTextTemplate(name string, data interface{}) string {
-	tpl, err := tt.ParseFiles(filepath.Join(tools.CurrentDir(), "templates", fmt.Sprintf("%s.txt", name)))
+	tpl, err := text.ParseFiles(
+		filepath.Join(common.CurrentDir(), common.EmailTemplatesDir, fmt.Sprintf("%s.txt", name)),
+	)
 	if err != nil {
 		panic(err)
 	}
@@ -19,12 +21,13 @@ func renderTextTemplate(name string, data interface{}) string {
 	if err := tpl.Execute(&tplBytes, data); err != nil {
 		panic(err)
 	}
-
 	return tplBytes.String()
 }
 
 func renderHtmlTemplate(name string, data interface{}) string {
-	tpl, err := ht.ParseFiles(filepath.Join(tools.CurrentDir(), "templates", fmt.Sprintf("%s.html", name)))
+	tpl, err := html.ParseFiles(
+		filepath.Join(common.CurrentDir(), common.EmailTemplatesDir, fmt.Sprintf("%s.html", name)),
+	)
 	if err != nil {
 		panic(err)
 	}
@@ -33,6 +36,5 @@ func renderHtmlTemplate(name string, data interface{}) string {
 	if err := tpl.Execute(&tplBytes, data); err != nil {
 		panic(err)
 	}
-
 	return tplBytes.String()
 }

@@ -10,6 +10,7 @@ import (
 	"github.com/resurtm/boomak-server/mailing/jobs"
 	"github.com/resurtm/boomak-server/mailing/types"
 	"github.com/resurtm/boomak-server/db"
+	"fmt"
 )
 
 type User struct {
@@ -86,4 +87,26 @@ func (user *User) Create(session *db.Session) error {
 	}
 	user.Id = bson.NewObjectId()
 	return session.C("user").Insert(user)
+}
+
+func (user *User) VerifyEmail(key string, session *db.Session) error {
+	if user.EmailVerificationToken != key {
+		return fmt.Errorf("invalid token has been passed")
+	}
+	if session == nil {
+		session = db.New()
+		defer session.Close()
+	}
+	query := bson.M{"$and": []bson.M{
+		{"username": user.Username},
+		{"email": user.Email},
+	}}
+	change := bson.M{"$set": bson.M{
+		"email_verified":           true,
+		"email_verification_token": nil,
+	}}
+	if err := session.C("user").Update(query, change); err != nil {
+		return err
+	}
+	return nil
 }

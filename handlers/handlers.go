@@ -17,6 +17,7 @@ func New() http.Handler {
 	r.Handle("/v1/register", http.HandlerFunc(registerHandler)).Methods("POST")
 	r.Handle("/v1/check", http.HandlerFunc(checkHandler)).Methods("POST")
 	r.Handle("/v1/get-settings", middleware.Auth(http.HandlerFunc(getSettingsHandler))).Methods("GET")
+	r.Handle("/v1/verify-email", middleware.Auth(http.HandlerFunc(verifyEmailHandler))).Methods("POST")
 
 	r.Handle("/v1/test-action", middleware.Auth(http.HandlerFunc(testActionHandler))).Methods("POST")
 	if cfg.C().Mailing.EnableTestMailer {

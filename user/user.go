@@ -28,7 +28,7 @@ func (user *User) MakeEmailNonVerified(commit bool, sendEmail bool, session *db.
 		return err
 	}
 	user.EmailVerified = false
-	user.EmailVerificationToken = token
+	user.EmailVerificationToken = token[1:len(token)-3]
 	if commit {
 		if session == nil {
 			session = db.New()

@@ -16,7 +16,7 @@ func getSettingsHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Username      string `json:"username"`
 		Email         string `json:"email"`
-		EmailVerified bool   `json:"email_verified" bson:"email_verified"`
+		EmailVerified bool   `json:"emailVerified"`
 	}{
 		Username:      u.Username,
 		Email:         u.Email,

@@ -10,6 +10,8 @@ import (
 	"encoding/json"
 )
 
+const jsonSchemaDefaultDirectory = "jsonSchema"
+
 func processHandlerData(container interface{}, schema string, w http.ResponseWriter, r *http.Request) bool {
 	// step 1 - receive data
 	var data map[string]interface{}

@@ -9,8 +9,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const jsonSchemaDefaultDirectory = "jsonSchema"
-
 func New() http.Handler {
 	log.Info("creating handlers object")
 	r := mux.NewRouter()

@@ -9,6 +9,30 @@ import (
 	"errors"
 )
 
+func FindByUserID(userID string, offset int, limit int, session *db.Session) ([]Bookmark, error) {
+	if session == nil {
+		session = db.New()
+		defer session.Close()
+	}
+
+	exists, err := user.ExistsByID(userID, session)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.New("non existing user ID has been provided")
+	}
+
+	bookmarks := []Bookmark{}
+	query := bson.M{"user": bson.ObjectIdHex(userID)}
+	err = session.C("bookmark").Find(query).Sort("_id").Skip(offset).Limit(limit).All(&bookmarks)
+	if err != nil {
+		return nil, err
+	} else {
+		return bookmarks, nil
+	}
+}
+
 func GenerateBookmarks(bookmarkCount uint, userID string, session *db.Session) error {
 	if session == nil {
 		session = db.New()

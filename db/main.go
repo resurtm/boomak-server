@@ -13,7 +13,11 @@ var mainSession *Session
 
 // get rid of DB(...) call when trying to achieve *mgo.Collection instance
 func (session *Session) C(name string) *mgo.Collection {
-	return session.DB(config.C().Database.Name).C(name)
+	return session.Session.DB(config.C().Database.Name).C(name)
+}
+
+func (session *Session) DB() *mgo.Database {
+	return session.Session.DB(config.C().Database.Name)
 }
 
 func New() *Session {

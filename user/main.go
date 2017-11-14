@@ -9,6 +9,7 @@ import (
 	"time"
 	"github.com/resurtm/boomak-server/db"
 	"errors"
+	log "github.com/sirupsen/logrus"
 )
 
 type User struct {
@@ -85,6 +86,10 @@ func (user *User) Create(session *db.Session) error {
 }
 
 func (user *User) VerifyEmail(key string, session *db.Session) error {
+	log.WithFields(log.Fields{
+		"valid_token": user.EmailVerificationToken,
+		"checked_token": key,
+	}).Info("checking user's email verification token")
 	if user.EmailVerificationToken != key {
 		return errors.New("invalid token has been passed")
 	}

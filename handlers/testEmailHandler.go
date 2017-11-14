@@ -1,15 +1,11 @@
-package handlers_old
+package handlers
 
 import (
 	"net/http"
-	"github.com/resurtm/boomak-server/cfg"
-	"github.com/resurtm/boomak-server/mailing/jobs"
-	mtypes "github.com/resurtm/boomak-server/mailing/types"
-	"github.com/resurtm/boomak-server/types"
 )
 
 func testEmailHandler(w http.ResponseWriter, r *http.Request) {
-	if !cfg.C().Mailing.EnableTestMailer {
+	/*if !cfg.C().Mailing.EnableTestMailer {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
@@ -21,5 +17,5 @@ func testEmailHandler(w http.ResponseWriter, r *http.Request) {
 
 	if cfg.C().Mailing.EnableTestMailer {
 		jobs.MailJobsQueue <- mtypes.MailJob{Kind: mtypes.TestMailJob, Payload: data}
-	}
+	}*/
 }

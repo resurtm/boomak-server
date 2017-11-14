@@ -6,11 +6,12 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/rs/cors"
 	"github.com/resurtm/boomak-server/config"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
+	"log"
 )
 
 func New() http.Handler {
-	log.Info("creating handlers object")
+	logrus.Info("creating handlers object")
 	r := mux.NewRouter()
 
 	r.Handle("/v1/login", http.HandlerFunc(loginHandler)).Methods("POST")
@@ -40,5 +41,6 @@ func New() http.Handler {
 		AllowedHeaders: config.C().CORS.Headers,
 		Debug:          true,
 	})
-	return handlers.LoggingHandler(log.StandardLogger().Writer(), c.Handler(r))
+	c.Log = log.New(logrus.StandardLogger().Writer(), "[cors] ", log.LstdFlags)
+	return handlers.LoggingHandler(logrus.StandardLogger().Writer(), c.Handler(r))
 }

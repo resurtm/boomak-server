@@ -1,35 +1,34 @@
 package user
 
 import (
-	"github.com/resurtm/boomak-server/cfg"
+	"github.com/resurtm/boomak-server/config"
 	"github.com/resurtm/boomak-server/common"
 	"gopkg.in/mgo.v2/bson"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/dgrijalva/jwt-go"
 	"time"
-	"github.com/resurtm/boomak-server/mailing/jobs"
-	"github.com/resurtm/boomak-server/mailing/types"
 	"github.com/resurtm/boomak-server/db"
-	"fmt"
+	"errors"
 )
 
 type User struct {
 	Id       bson.ObjectId `json:"id" bson:"_id,omitempty"`
-	Username string        `json:"username"`
-	Password string        `json:"password"`
+	Username string        `json:"username" bson:"username"`
+	Password string        `json:"password" bson:"password"`
 
-	Email                  string `json:"email"`
+	Email                  string `json:"email" bson:"email"`
 	EmailVerified          bool   `json:"email_verified" bson:"email_verified"`
 	EmailVerificationToken string `json:"email_verification_token" bson:"email_verification_token"`
 }
 
 func (user *User) MakeEmailNonVerified(commit bool, sendEmail bool, session *db.Session) error {
-	token, err := common.GenerateRandomString(int(cfg.C().Mailing.VerificationTokenLength))
+	token, err := common.GenerateRandomString(int(config.C().Mailing.VerificationTokenLength))
 	if err != nil {
 		return err
 	}
 	user.EmailVerified = false
 	user.EmailVerificationToken = token[1:len(token)-3]
+
 	if commit {
 		if session == nil {
 			session = db.New()
@@ -47,8 +46,9 @@ func (user *User) MakeEmailNonVerified(commit bool, sendEmail bool, session *db.
 			return err
 		}
 	}
+
 	if sendEmail {
-		jobs.MailJobsQueue <- types.MailJob{Kind: types.EmailVerifyMailJob, Payload: *user}
+		//jobs.MailJobsQueue <- types.MailJob{Kind: types.EmailVerifyMailJob, Payload: *user}
 	}
 	return nil
 }
@@ -63,8 +63,7 @@ func (user *User) SetRawPassword(password string) bool {
 }
 
 func (user *User) CheckPassword(password string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-	return err == nil
+	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) == nil
 }
 
 func (user *User) GenerateJWT() (string, error) {
@@ -73,11 +72,7 @@ func (user *User) GenerateJWT() (string, error) {
 	claims["username"] = user.Username
 	claims["email"] = user.Email
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-	return token.SignedString([]byte(cfg.C().Security.JWTSigningKey))
-}
-
-func (user *User) Update(session *db.Session) error {
-	return nil
+	return token.SignedString([]byte(config.C().Security.JWTSigningKey))
 }
 
 func (user *User) Create(session *db.Session) error {
@@ -91,8 +86,9 @@ func (user *User) Create(session *db.Session) error {
 
 func (user *User) VerifyEmail(key string, session *db.Session) error {
 	if user.EmailVerificationToken != key {
-		return fmt.Errorf("invalid token has been passed")
+		return errors.New("invalid token has been passed")
 	}
+
 	if session == nil {
 		session = db.New()
 		defer session.Close()
@@ -108,6 +104,7 @@ func (user *User) VerifyEmail(key string, session *db.Session) error {
 	if err := session.C("user").Update(query, change); err != nil {
 		return err
 	}
-	jobs.MailJobsQueue <- types.MailJob{Kind: types.SignupFinishedMailJob, Payload: *user}
+
+	//jobs.MailJobsQueue <- types.MailJob{Kind: types.SignupFinishedMailJob, Payload: *user}
 	return nil
 }

@@ -4,8 +4,9 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"github.com/dgrijalva/jwt-go"
 	"fmt"
-	"github.com/resurtm/boomak-server/cfg"
+	"github.com/resurtm/boomak-server/config"
 	"github.com/resurtm/boomak-server/db"
+	"errors"
 )
 
 func FindByUsername(username string, session *db.Session) (*User, error) {
@@ -14,7 +15,8 @@ func FindByUsername(username string, session *db.Session) (*User, error) {
 		defer session.Close()
 	}
 	var user User
-	if err := session.C("user").Find(bson.M{"username": username}).One(&user); err != nil {
+	query := bson.M{"username": username}
+	if err := session.C("user").Find(query).One(&user); err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -34,14 +36,14 @@ func FindByUsernameAndEmail(username string, email string, session *db.Session) 
 }
 
 func ExistsByUsernameAndEmail(username string, email string, session *db.Session) (bool, error) {
-	return existsByUsernameAndOrEmail(username, email, session, "$and")
+	return existsByUsernameEmail(username, email, session, "$and")
 }
 
 func ExistsByUsernameOrEmail(username string, email string, session *db.Session) (bool, error) {
-	return existsByUsernameAndOrEmail(username, email, session, "$or")
+	return existsByUsernameEmail(username, email, session, "$or")
 }
 
-func existsByUsernameAndOrEmail(username string, email string, session *db.Session, compOp string) (bool, error) {
+func existsByUsernameEmail(username string, email string, session *db.Session, compOp string) (bool, error) {
 	if session == nil {
 		session = db.New()
 		defer session.Close()
@@ -63,7 +65,7 @@ func CheckJWT(authToken string) (jwt.MapClaims, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(cfg.C().Security.JWTSigningKey), nil
+		return []byte(config.C().Security.JWTSigningKey), nil
 	})
 	if err != nil {
 		return nil, err
@@ -71,7 +73,7 @@ func CheckJWT(authToken string) (jwt.MapClaims, error) {
 
 	// check auth token, step 2
 	if claims, ok := token.Claims.(jwt.MapClaims); !ok || !token.Valid {
-		return nil, fmt.Errorf("cannot validate JWT token")
+		return nil, errors.New("cannot validate JWT token")
 	} else {
 		return claims, nil
 	}

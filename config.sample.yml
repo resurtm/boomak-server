@@ -3,14 +3,13 @@
 server:
   hostname: localhost
   port: 3150
-  debug: true
 
 security:
-  jwtsigningkey: XXX
+  jwtsigningkey: XXXXXX
 
 database:
   user: boomak_user
-  password: 123123
+  password: XXXXXX
   hostname: localhost
   port: 27017
   name: boomak
@@ -24,12 +23,10 @@ cors:
   headers:
     - Content-Type
     - Authorization
-  debug: true
 
 mailing:
-  accesskeyid: XXX
-  secretaccesskey: XXX
+  accesskeyid: AKIAXXXXXX
+  secretaccesskey: XXXXXX
   awsregion: eu-west-1
   fromemail: resurtm@gmail.com
   enabletestmailer: true
-  debug: true

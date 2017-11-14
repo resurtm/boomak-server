@@ -1,12 +1,13 @@
-package cfg
+package config
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type configuration struct {
 	Server struct {
 		Hostname string `required:"true"`
 		Port     uint   `required:"true"`
-		Debug    bool   ``
 	}
 
 	Security struct {
@@ -25,7 +26,6 @@ type configuration struct {
 	CORS struct {
 		Origins []string ``
 		Headers []string ``
-		Debug   bool     ``
 	}
 
 	Mailing struct {
@@ -36,24 +36,23 @@ type configuration struct {
 		FromEmail               string `required:"true"`
 		VerificationTokenLength byte   `default:"8"`
 		EnableTestMailer        bool   ``
-		Debug                   bool   ``
 
-		WorkerCount      byte   `default:"2"`
-		WorkerQueueSize  uint   `default:"255"`
+		WorkerCount     byte `default:"2"`
+		WorkerQueueSize uint `default:"255"`
 	}
 }
 
-func (c configuration) ListenAddr() string {
-	return fmt.Sprintf("%s:%d", c.Server.Hostname, c.Server.Port)
+func (config configuration) ListenAddr() string {
+	return fmt.Sprintf("%s:%d", config.Server.Hostname, config.Server.Port)
 }
 
-func (c configuration) DSN() (dsn string) {
-	d := c.Database
-	if d.NoPassword {
-		dsn = fmt.Sprintf("mongodb://%s:%d/%s", d.Hostname, d.Port, d.Name)
+func (config configuration) DSN() (dsn string) {
+	db := config.Database
+	if db.NoPassword {
+		dsn = fmt.Sprintf("mongodb://%s:%d/%s", db.Hostname, db.Port, db.Name)
 	} else {
 		// [mongodb://][user:pass@]host1[:port1][,host2[:port2],...][/database][?options]
-		dsn = fmt.Sprintf("mongodb://%s:%s@%s:%d/%s", d.User, d.Password, d.Hostname, d.Port, d.Name)
+		dsn = fmt.Sprintf("mongodb://%s:%s@%s:%d/%s", db.User, db.Password, db.Hostname, db.Port, db.Name)
 	}
 	return
 }

@@ -16,8 +16,8 @@
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/stscreds","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/shareddefaults","private/protocol","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/xml/xmlutil","service/ses","service/ses/sesiface","service/sts"]
-  revision = "f426770fd5a4bae6186b280d4af7dca83a4cdef4"
-  version = "v1.12.17"
+  revision = "e6c5e190452424b404ecdb81d6e3991d46b18e9d"
+  version = "v1.12.26"
 
 [[projects]]
   branch = "master"
@@ -29,7 +29,7 @@
   branch = "master"
   name = "github.com/codegangsta/gin"
   packages = [".","lib"]
-  revision = "01243699c19287f0eaccc8f2de4a46ff7ec3ba91"
+  revision = "cafe2ce98974a3dcca6b92ce393a91a0b58b8133"
 
 [[projects]]
   name = "github.com/dgrijalva/jwt-go"
@@ -40,8 +40,8 @@
 [[projects]]
   name = "github.com/go-ini/ini"
   packages = ["."]
-  revision = "5b3e00af70a9484542169a976dcab8d03e601a17"
-  version = "v1.30.0"
+  revision = "f280b3ba517bf5fc98922624f21fb0e7a92adaec"
+  version = "v1.30.3"
 
 [[projects]]
   name = "github.com/gorilla/context"
@@ -52,20 +52,20 @@
 [[projects]]
   name = "github.com/gorilla/handlers"
   packages = ["."]
-  revision = "a4043c62cc2329bacda331d33fc908ab11ef0ec3"
-  version = "v1.2.1"
+  revision = "90663712d74cb411cbef281bc1e08c19d1a76145"
+  version = "v1.3.0"
 
 [[projects]]
   name = "github.com/gorilla/mux"
   packages = ["."]
-  revision = "24fca303ac6da784b9e8269f724ddeb0b2eea5e7"
-  version = "v1.5.0"
+  revision = "7f08801859139f86dfafd1c296e2cba9a80d292e"
+  version = "v1.6.0"
 
 [[projects]]
   branch = "master"
   name = "github.com/jinzhu/configor"
   packages = ["."]
-  revision = "6c409036e1aea1420f2e1a196f95c0e3c4aef091"
+  revision = "6ecfe629230f24c2e92c7894c6ab21b83b757a39"
 
 [[projects]]
   name = "github.com/jmespath/go-jmespath"
@@ -89,6 +89,12 @@
   packages = ["."]
   revision = "7af7a1e09ba336d2ea14b1ce73bf693c6837dbf6"
   version = "v1.2"
+
+[[projects]]
+  name = "github.com/sirupsen/logrus"
+  packages = ["."]
+  revision = "f006c2ac4710855cf0f916dd6b77acf6b048dc6e"
+  version = "v1.0.3"
 
 [[projects]]
   name = "github.com/tj/go-ses"
@@ -117,8 +123,14 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["bcrypt","blowfish"]
-  revision = "2509b142fb2b797aa7587dad548f113b2c0f20ce"
+  packages = ["bcrypt","blowfish","ssh/terminal"]
+  revision = "6a293f2d4b14b8e6d3f0539e383f6d0d30fce3fd"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix","windows"]
+  revision = "665f6529cca930e27b831a0d1dafffbe1c172924"
 
 [[projects]]
   branch = "v2"
@@ -141,6 +153,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "2c450ade686b7f70de700c86aa462013cc97da9076c1a5ebb0a8de34f20be0da"
+  inputs-digest = "7920262e4b11e194c6aeee0e7c484dbd71ee417be2ce3bee91392419268d6b3e"
   solver-name = "gps-cdcl"
   solver-version = 1

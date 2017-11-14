@@ -1,16 +1,18 @@
 package main
 
 import (
-	"net/http"
-	"github.com/resurtm/boomak-server/cfg"
+	"github.com/resurtm/boomak-server/config"
 	"github.com/resurtm/boomak-server/handlers"
-	"github.com/resurtm/boomak-server/mailing"
+	"net/http"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
-	mailing.InitMailing()
-	http.ListenAndServe(
-		cfg.C().ListenAddr(),
-		handlers.New(),
-	)
+	log.SetLevel(log.DebugLevel)
+	log.Info("app started")
+
+	//mailing.InitMailing()
+	http.ListenAndServe(config.C().ListenAddr(), handlers.New())
+
+	log.Info("app exited")
 }

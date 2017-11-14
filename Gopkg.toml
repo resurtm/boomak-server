@@ -51,3 +51,15 @@ required = ["github.com/codegangsta/gin"]
 [[constraint]]
   name = "github.com/fatih/structs"
   version = "1.0.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/kr/pretty"
+
+[[constraint]]
+  name = "github.com/davecgh/go-spew"
+  version = "1.1.0"
+
+[[constraint]]
+  name = "github.com/sirupsen/logrus"
+  version = "1.0.3"

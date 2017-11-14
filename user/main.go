@@ -50,7 +50,7 @@ func (user *User) MakeEmailNonVerified(commit bool, sendEmail bool, session *db.
 	}
 
 	if sendEmail {
-		mailing.EnqueueEmailVerifyMailJob(user)
+		mailing.EnqueueEmailVerifyMailJob(*user)
 	}
 	return nil
 }
@@ -111,6 +111,6 @@ func (user *User) VerifyEmail(key string, session *db.Session) error {
 		return err
 	}
 
-	mailing.EnqueueSignupFinishedMailJob(user)
+	mailing.EnqueueSignupFinishedMailJob(*user)
 	return nil
 }

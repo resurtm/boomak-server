@@ -12,6 +12,8 @@ type configuration struct {
 
 	Security struct {
 		JWTSigningKey string `required:"true"`
+
+		EnableFaker bool ``
 	}
 
 	Database struct {

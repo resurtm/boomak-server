@@ -6,6 +6,7 @@ server:
 
 security:
   jwtsigningkey: XXXXXX
+  enablefaker: false
 
 database:
   user: boomak_user

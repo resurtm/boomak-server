@@ -59,6 +59,19 @@ func existsByUsernameEmail(username string, email string, session *db.Session, c
 	}
 }
 
+func ExistsByID(userID string, session *db.Session) (bool, error) {
+	if session == nil {
+		session = db.New()
+		defer session.Close()
+	}
+	query := bson.M{"_id": bson.ObjectIdHex(userID)}
+	if n, err := session.C("user").Find(query).Count(); err != nil {
+		return false, err
+	} else {
+		return n != 0, err
+	}
+}
+
 func CheckJWT(authToken string) (jwt.MapClaims, error) {
 	// check auth token, step 1
 	token, err := jwt.Parse(authToken, func(token *jwt.Token) (interface{}, error) {

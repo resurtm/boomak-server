@@ -63,3 +63,7 @@ required = ["github.com/codegangsta/gin"]
 [[constraint]]
   name = "github.com/sirupsen/logrus"
   version = "1.0.3"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/icrowley/fake"

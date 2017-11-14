@@ -19,11 +19,20 @@ func New() http.Handler {
 	r.Handle("/v1/check", http.HandlerFunc(checkHandler)).Methods("GET")
 	r.Handle("/v1/register", http.HandlerFunc(registerHandler)).Methods("POST")
 
-	r.Handle("/v1/get-settings", authMiddleware(http.HandlerFunc(getSettingsHandler))).Methods("GET")
+	r.Handle("/v1/settings", authMiddleware(http.HandlerFunc(getSettingsHandler))).Methods("GET")
 	r.Handle("/v1/verify-email", authMiddleware(http.HandlerFunc(verifyEmailHandler))).Methods("POST")
+
+	r.Handle("/v1/bookmark", authMiddleware(http.HandlerFunc(getBookmarksHandler))).Methods("GET")
+	r.Handle("/v1/bookmark", authMiddleware(http.HandlerFunc(setBookmarkHandler))).Methods("POST")
+	r.Handle("/v1/bookmark", authMiddleware(http.HandlerFunc(deleteBookmarkHandler))).Methods("DELETE")
 
 	r.Handle("/v1/test-guest", http.HandlerFunc(testActionHandler)).Methods("POST")
 	r.Handle("/v1/test-auth", authMiddleware(http.HandlerFunc(testActionHandler))).Methods("POST")
+
+	if config.C().Security.EnableFaker {
+		r.Handle("/v1/generate-bookmarks", http.HandlerFunc(generateBookmarksHandler)).Methods("POST")
+	}
+
 	if config.C().Mailing.EnableTestMailer {
 		r.Handle("/v1/test-email", http.HandlerFunc(testEmailHandler)).Methods("POST")
 	}

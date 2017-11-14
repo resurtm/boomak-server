@@ -2,16 +2,16 @@ package mailing
 
 import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/resurtm/boomak-server/cfg"
+	"github.com/resurtm/boomak-server/config"
 )
 
 type awsCredentialsProvider struct{}
 
 func (m *awsCredentialsProvider) Retrieve() (credentials.Value, error) {
 	return credentials.Value{
-		AccessKeyID:     cfg.C().Mailing.AccessKeyID,
-		SecretAccessKey: cfg.C().Mailing.SecretAccessKey,
-		ProviderName:    "Boomak",
+		AccessKeyID:     config.C().Mailing.AccessKeyID,
+		SecretAccessKey: config.C().Mailing.SecretAccessKey,
+		ProviderName:    "boomak",
 	}, nil
 }
 

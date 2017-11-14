@@ -31,6 +31,7 @@ func New() http.Handler {
 	c := cors.New(cors.Options{
 		AllowedOrigins: config.C().CORS.Origins,
 		AllowedHeaders: config.C().CORS.Headers,
+		Debug:          true,
 	})
 	return handlers.LoggingHandler(log.StandardLogger().Writer(), c.Handler(r))
 }

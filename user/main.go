@@ -10,6 +10,7 @@ import (
 	"github.com/resurtm/boomak-server/db"
 	"errors"
 	log "github.com/sirupsen/logrus"
+	mailing "github.com/resurtm/boomak-server/mailing/base"
 )
 
 type User struct {
@@ -49,7 +50,7 @@ func (user *User) MakeEmailNonVerified(commit bool, sendEmail bool, session *db.
 	}
 
 	if sendEmail {
-		//jobs.MailJobsQueue <- types.MailJob{Kind: types.EmailVerifyMailJob, Payload: *user}
+		mailing.EnqueueEmailVerifyMailJob(user)
 	}
 	return nil
 }
@@ -110,6 +111,6 @@ func (user *User) VerifyEmail(key string, session *db.Session) error {
 		return err
 	}
 
-	//jobs.MailJobsQueue <- types.MailJob{Kind: types.SignupFinishedMailJob, Payload: *user}
+	mailing.EnqueueSignupFinishedMailJob(user)
 	return nil
 }

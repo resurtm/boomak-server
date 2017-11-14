@@ -53,12 +53,12 @@ func (user *User) MakeEmailNonVerified(commit bool, sendEmail bool, session *db.
 	return nil
 }
 
-func (user *User) SetRawPassword(password string) bool {
+func (user *User) SetRawPassword(password string) error {
 	if hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost); err != nil {
-		return false
+		return err
 	} else {
 		user.Password = string(hashed)
-		return true
+		return nil
 	}
 }
 

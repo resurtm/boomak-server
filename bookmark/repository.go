@@ -30,7 +30,7 @@ func FindByUserID(userId string, offset int, limit int, session *db.Session) ([]
 	}
 
 	bookmarks := []Bookmark{}
-	query := bson.M{"user": bson.ObjectId(userId)}
+	query := bson.M{"user": bson.ObjectIdHex(userId)}
 
 	log.WithFields(log.Fields{
 		"user_id": userId,
@@ -42,6 +42,23 @@ func FindByUserID(userId string, offset int, limit int, session *db.Session) ([]
 		return nil, err
 	} else {
 		return bookmarks, nil
+	}
+}
+
+func CountByUserId(userId string, session *db.Session) (int, error) {
+	if session == nil {
+		session = db.New()
+		defer session.Close()
+	}
+	query := bson.M{"user": bson.ObjectIdHex(userId)}
+	log.WithFields(log.Fields{
+		"user_id": userId,
+		"query":   query,
+	}).Debug("trying to find count of bookmarks by user ID")
+	if n, err := session.C("bookmark").Find(query).Count(); err != nil {
+		return 0, err
+	} else {
+		return n, err
 	}
 }
 
@@ -83,7 +100,7 @@ func GenerateBookmarks(bookmarkCount uint, userId string, session *db.Session) e
 	for i := uint(0); i < bookmarkCount; i++ {
 		bookmark := Bookmark{
 			Id:     bson.NewObjectId(),
-			UserId: bson.ObjectId(userId),
+			UserId: bson.ObjectIdHex(userId),
 			Url:    fmt.Sprintf("http://%s/", fake.DomainName()),
 		}
 

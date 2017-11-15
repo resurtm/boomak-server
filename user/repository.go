@@ -64,7 +64,7 @@ func ExistsByID(userID string, session *db.Session) (bool, error) {
 		session = db.New()
 		defer session.Close()
 	}
-	query := bson.M{"_id": bson.ObjectId(userID)}
+	query := bson.M{"_id": bson.ObjectIdHex(userID)}
 	if n, err := session.C("user").Find(query).Count(); err != nil {
 		return false, err
 	} else {

@@ -21,6 +21,7 @@ func getBookmarksHandler(w http.ResponseWriter, r *http.Request) {
 	if usr == nil {
 		return
 	}
+
 	offset, ok := parseIntegerParam("offset", w, r)
 	if !ok {
 		return
@@ -30,28 +31,31 @@ func getBookmarksHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bookmarks, err := bookmark.FindByUserID(string(usr.Id), offset, limit, session)
+	bookmarks, err := bookmark.FindByUserID(usr.Id.Hex(), offset, limit, session)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("unable to fetch bookmarks"))
-		log.WithFields(log.Fields{
-			"user":   usr,
-			"offset": offset,
-			"limit":  limit,
-			"err":    err,
-		}).Warn("unable to fetch bookmarks")
+		log.WithFields(log.Fields{"user": usr, "offset": offset, "limit": limit, "err": err}).Warn("unable to fetch bookmarks")
 		return
 	}
 
-	if resp, err := json.Marshal(bookmarks); err != nil {
+	bookmarksCount, err := bookmark.CountByUserId(usr.Id.Hex(), session)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("unable to fetch bookmarks count"))
+		log.WithFields(log.Fields{"user": usr, "offset": offset, "limit": limit, "err": err}).Warn("unable to fetch bookmarks count")
+		return
+	}
+
+	respData := struct {
+		Count     int                 `json:"count"`
+		Bookmarks []bookmark.Bookmark `json:"bookmarks"`
+	}{bookmarksCount, bookmarks}
+
+	if resp, err := json.Marshal(respData); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("unable to prepare response data"))
-		log.WithFields(log.Fields{
-			"user":   usr,
-			"offset": offset,
-			"limit":  limit,
-			"err":    err,
-		}).Warn("unable to prepare response data")
+		log.WithFields(log.Fields{"user": usr, "offset": offset, "limit": limit, "err": err}).Warn("unable to prepare response data")
 	} else {
 		w.Write(resp)
 	}

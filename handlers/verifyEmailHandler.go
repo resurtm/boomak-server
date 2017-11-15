@@ -4,10 +4,14 @@ import (
 	"net/http"
 	"io/ioutil"
 	log "github.com/sirupsen/logrus"
+	"github.com/resurtm/boomak-server/db"
 )
 
 func verifyEmailHandler(w http.ResponseWriter, r *http.Request) {
-	usr := findUserByRequest(w, r)
+	session := db.New()
+	defer session.Close()
+
+	usr := findUserByRequest(w, r, session)
 	if usr == nil {
 		return
 	}
@@ -23,7 +27,7 @@ func verifyEmailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := usr.VerifyEmail(string(bytes), nil); err != nil {
+	if err := usr.VerifyEmail(string(bytes), session); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("email verification code is invalid"))
 		log.WithFields(log.Fields{

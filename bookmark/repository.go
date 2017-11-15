@@ -38,13 +38,13 @@ func FindByUserID(userID string, offset int, limit int, session *db.Session) ([]
 	}
 }
 
-func GenerateBookmarks(bookmarkCount uint, userID string, session *db.Session) error {
+func GenerateBookmarks(bookmarkCount uint, userId string, session *db.Session) error {
 	if session == nil {
 		session = db.New()
 		defer session.Close()
 	}
 
-	exists, err := user.ExistsByID(userID, session)
+	exists, err := user.ExistsByID(userId, session)
 	if err != nil {
 		return err
 	}
@@ -54,9 +54,9 @@ func GenerateBookmarks(bookmarkCount uint, userID string, session *db.Session) e
 
 	for i := uint(0); i < bookmarkCount; i++ {
 		bookmark := Bookmark{
-			Id:   bson.NewObjectId(),
-			User: bson.ObjectId(userID),
-			Url:  fmt.Sprintf("http://%s/", fake.DomainName()),
+			Id:     bson.NewObjectId(),
+			UserId: bson.ObjectId(userId),
+			Url:    fmt.Sprintf("http://%s/", fake.DomainName()),
 		}
 
 		if err := session.C("bookmark").Insert(bookmark); err != nil {

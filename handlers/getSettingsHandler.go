@@ -7,7 +7,7 @@ import (
 )
 
 func getSettingsHandler(w http.ResponseWriter, r *http.Request) {
-	usr := findUserByRequest(w, r)
+	usr := findUserByRequest(w, r, nil)
 	if usr == nil {
 		return
 	}

@@ -5,9 +5,10 @@ import (
 	"net/http"
 	log "github.com/sirupsen/logrus"
 	"strings"
+	"github.com/resurtm/boomak-server/db"
 )
 
-func findUserByRequest(w http.ResponseWriter, r *http.Request) *user.User {
+func findUserByRequest(w http.ResponseWriter, r *http.Request, session *db.Session) *user.User {
 	data, ok := r.Header["Authorization"]
 	if !ok || len(data) != 1 || !strings.Contains(data[0], "bearer ") {
 		w.WriteHeader(http.StatusForbidden)
@@ -33,7 +34,7 @@ func findUserByRequest(w http.ResponseWriter, r *http.Request) *user.User {
 	}
 
 	username, email := claims["username"].(string), claims["email"].(string)
-	if usr, err := user.FindByUsernameAndEmail(username, email, nil); err != nil || usr == nil {
+	if usr, err := user.FindByUsernameAndEmail(username, email, session); err != nil || usr == nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("user by given email and/or username cannot be found"))
 		log.WithFields(log.Fields{

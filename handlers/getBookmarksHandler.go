@@ -4,6 +4,7 @@ import (
 	"net/http"
 	log "github.com/sirupsen/logrus"
 	"github.com/resurtm/boomak-server/bookmark"
+	"github.com/resurtm/boomak-server/db"
 	"encoding/json"
 )
 
@@ -13,7 +14,10 @@ import (
 // https://stackoverflow.com/questions/40796666/need-to-use-pagination-in-mgo
 // https://stackoverflow.com/questions/40634865/efficient-paging-in-mongodb-using-mgo
 func getBookmarksHandler(w http.ResponseWriter, r *http.Request) {
-	usr := findUserByRequest(w, r)
+	session := db.New()
+	defer session.Close()
+
+	usr := findUserByRequest(w, r, session)
 	if usr == nil {
 		return
 	}
@@ -26,7 +30,7 @@ func getBookmarksHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bookmarks, err := bookmark.FindByUserID(string(usr.Id), offset, limit, nil)
+	bookmarks, err := bookmark.FindByUserID(string(usr.Id), offset, limit, session)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("unable to fetch bookmarks"))

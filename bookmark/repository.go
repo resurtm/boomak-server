@@ -7,6 +7,7 @@ import (
 	"github.com/icrowley/fake"
 	"github.com/resurtm/boomak-server/user"
 	"errors"
+	log "github.com/sirupsen/logrus"
 )
 
 // todo: fixme: make pagination more efficient
@@ -14,13 +15,13 @@ import (
 // https://github.com/icza/minquery/pull/1
 // https://stackoverflow.com/questions/40796666/need-to-use-pagination-in-mgo
 // https://stackoverflow.com/questions/40634865/efficient-paging-in-mongodb-using-mgo
-func FindByUserID(userID string, offset int, limit int, session *db.Session) ([]Bookmark, error) {
+func FindByUserID(userId string, offset int, limit int, session *db.Session) ([]Bookmark, error) {
 	if session == nil {
 		session = db.New()
 		defer session.Close()
 	}
 
-	exists, err := user.ExistsByID(userID, session)
+	exists, err := user.ExistsByID(userId, session)
 	if err != nil {
 		return nil, err
 	}
@@ -29,13 +30,40 @@ func FindByUserID(userID string, offset int, limit int, session *db.Session) ([]
 	}
 
 	bookmarks := []Bookmark{}
-	query := bson.M{"user": bson.ObjectId(userID)}
+	query := bson.M{"user": bson.ObjectId(userId)}
+
+	log.WithFields(log.Fields{
+		"user_id": userId,
+		"query":   query,
+	}).Debug("trying to find a set of bookmarks by user ID")
+
 	err = session.C("bookmark").Find(query).Sort("_id").Skip(offset).Limit(limit).All(&bookmarks)
 	if err != nil {
 		return nil, err
 	} else {
 		return bookmarks, nil
 	}
+}
+
+func FindOneById(bookmarkId string, userId string, session *db.Session) (*Bookmark, error) {
+	if session == nil {
+		session = db.New()
+		defer session.Close()
+	}
+
+	var bookmark Bookmark
+	query := bson.M{"_id": bson.ObjectIdHex(bookmarkId), "user": bson.ObjectIdHex(userId)}
+
+	log.WithFields(log.Fields{
+		"bookmark_id": bookmarkId,
+		"user_id":     userId,
+		"query":       query,
+	}).Debug("trying to find a single bookmark by ID")
+
+	if err := session.C("bookmark").Find(query).One(&bookmark); err != nil {
+		return nil, err
+	}
+	return &bookmark, nil
 }
 
 func GenerateBookmarks(bookmarkCount uint, userId string, session *db.Session) error {

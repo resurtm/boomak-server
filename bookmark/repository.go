@@ -9,6 +9,11 @@ import (
 	"errors"
 )
 
+// todo: fixme: make pagination more efficient
+// https://github.com/icza/minquery
+// https://github.com/icza/minquery/pull/1
+// https://stackoverflow.com/questions/40796666/need-to-use-pagination-in-mgo
+// https://stackoverflow.com/questions/40634865/efficient-paging-in-mongodb-using-mgo
 func FindByUserID(userID string, offset int, limit int, session *db.Session) ([]Bookmark, error) {
 	if session == nil {
 		session = db.New()
@@ -24,7 +29,7 @@ func FindByUserID(userID string, offset int, limit int, session *db.Session) ([]
 	}
 
 	bookmarks := []Bookmark{}
-	query := bson.M{"user": bson.ObjectIdHex(userID)}
+	query := bson.M{"user": bson.ObjectId(userID)}
 	err = session.C("bookmark").Find(query).Sort("_id").Skip(offset).Limit(limit).All(&bookmarks)
 	if err != nil {
 		return nil, err
@@ -50,7 +55,7 @@ func GenerateBookmarks(bookmarkCount uint, userID string, session *db.Session) e
 	for i := uint(0); i < bookmarkCount; i++ {
 		bookmark := Bookmark{
 			Id:   bson.NewObjectId(),
-			User: bson.ObjectIdHex(userID),
+			User: bson.ObjectId(userID),
 			Url:  fmt.Sprintf("http://%s/", fake.DomainName()),
 		}
 

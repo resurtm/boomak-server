@@ -7,15 +7,16 @@ import (
 	"encoding/json"
 )
 
+// todo: fixme: make pagination more efficient
+// https://github.com/icza/minquery
+// https://github.com/icza/minquery/pull/1
+// https://stackoverflow.com/questions/40796666/need-to-use-pagination-in-mgo
+// https://stackoverflow.com/questions/40634865/efficient-paging-in-mongodb-using-mgo
 func getBookmarksHandler(w http.ResponseWriter, r *http.Request) {
-	userID, ok := r.URL.Query()["user_id"]
-	if !ok || len(userID) != 1 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("user ID parameter has not been set"))
-		log.Warn("user ID parameter has not been set")
+	usr := findUserByRequest(w, r)
+	if usr == nil {
 		return
 	}
-
 	offset, ok := parseIntegerParam("offset", w, r)
 	if !ok {
 		return
@@ -25,15 +26,15 @@ func getBookmarksHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bookmarks, err := bookmark.FindByUserID(userID[0], offset, limit, nil)
+	bookmarks, err := bookmark.FindByUserID(string(usr.Id), offset, limit, nil)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("unable to fetch bookmarks"))
 		log.WithFields(log.Fields{
-			"user_id": userID,
-			"offset":  offset,
-			"limit":   limit,
-			"err":     err,
+			"user":   usr,
+			"offset": offset,
+			"limit":  limit,
+			"err":    err,
 		}).Warn("unable to fetch bookmarks")
 		return
 	}
@@ -42,10 +43,10 @@ func getBookmarksHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("unable to prepare response data"))
 		log.WithFields(log.Fields{
-			"user_id": userID,
-			"offset":  offset,
-			"limit":   limit,
-			"err":     err,
+			"user":   usr,
+			"offset": offset,
+			"limit":  limit,
+			"err":    err,
 		}).Warn("unable to prepare response data")
 	} else {
 		w.Write(resp)
